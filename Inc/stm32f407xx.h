@@ -6,6 +6,8 @@
 
 - peripheral definations --> peripheral base address typecasted to xxx_RegDef_t
 
+- clock enable-disable macros for all peripherals
+
 */
 
 #ifndef STM32F407xx_H_
@@ -123,7 +125,7 @@
 
 #define FSMC_FMC_BASEADDR 0xA0000000
 
-/********************** perpipheral register map (xx_RegDef_t) **********************  */
+/********************** perpipheral register map (xx_RegDef_t) ***********************/
 
 /* Reset and Clock Control (RCC) register map */
 
@@ -162,11 +164,12 @@ typedef struct
     __vo uint32_t PLLSAICFGR;
     __vo uint32_t DCKCFGR;
 
-}RCC_RegDef_t;
+} RCC_RegDef_t;
 
 /* System Configuration Controller register map */
 
-typedef struct{
+typedef struct
+{
 
     __vo uint32_t MEMRMP;
     __vo uint32_t PMC;
@@ -177,7 +180,7 @@ typedef struct{
     uint32_t RESERVED0[2];
     __vo uint32_t CMPCR;
 
-}SYSCFG_RegDef_t;
+} SYSCFG_RegDef_t;
 
 /* External Interrupt/Event Controller register map */
 
@@ -189,10 +192,13 @@ typedef struct
     __vo uint32_t FTSR;
     __vo uint32_t SWIER;
     __vo uint32_t PR;
-    
-}EXTI_RegDef_t;
 
-typedef struct{
+} EXTI_RegDef_t;
+
+/* GPIO register map */
+
+typedef struct
+{
 
     __vo uint32_t MODER;
     __vo uint32_t OTYPER;
@@ -204,9 +210,12 @@ typedef struct{
     __vo uint32_t LCKR;
     __vo uint32_t AFRL;
     __vo uint32_t AFRH;
-}GPIO_RegDef_t;
+} GPIO_RegDef_t;
 
-typedef struct{
+/* SPI register map */
+
+typedef struct
+{
 
     __vo uint32_t CR1;
     __vo uint32_t CR2;
@@ -218,10 +227,12 @@ typedef struct{
     __vo uint32_t I2SCFGR;
     __vo uint32_t I2SPR;
 
-}SPI_RegDef_t;
+} SPI_RegDef_t;
 
-typedef struct{
+/* I2S register map */
 
+typedef struct
+{
     __vo uint32_t CR1;
     __vo uint32_t CR2;
     __vo uint32_t OAR1;
@@ -233,26 +244,93 @@ typedef struct{
     __vo uint32_t TRISE;
     __vo uint32_t FLTR;
 
-}I2C_RegDef_t;
+} I2C_RegDef_t;
 
+/* USART register map */
 
+typedef struct
+{
+    __vo uint32_t SR;
+    __vo uint32_t DR;
+    __vo uint32_t BRR;
+    __vo uint32_t CR;
+    __vo uint32_t CR2;
+    __vo uint32_t CR3;
+    __vo uint32_t GTPR;
+} USART_RegDef_t;
 
-/* testing */
+/* peripheral instance to RegDef mapping */
 
+#define GPIOA ((GPIO_RegDef_t *)GPIOA_BASEADDR);
+#define GPIOB ((GPIO_RegDef_t *)GPIOB_BASEADDR);
+#define GPIOC ((GPIO_RegDef_t *)GPIOC_BASEADDR);
+#define GPIOD ((GPIO_RegDef_t *)GPIOD_BASEADDR);
+#define GPIOE ((GPIO_RegDef_t *)GPIOE_BASEADDR);
+#define GPIOF ((GPIO_RegDef_t *)GPIOF_BASEADDR);
+#define GPIOG ((GPIO_RegDef_t *)GPIOG_BASEADDR);
+#define GPIOH ((GPIO_RegDef_t *)GPIOH_BASEADDR);
+#define GPIOI ((GPIO_RegDef_t *)GPIOI_BASEADDR);
+#define GPIOJ ((GPIO_RegDef_t *)GPIOJ_BASEADDR);
+#define GPIOK ((GPIO_RegDef_t *)GPIOK_BASEADDR);
 
+#define SPI1 ((SPI_RegDef_t *)SPI1_BASEADDR);
+#define SPI2 ((SPI_RegDef_t *)SPI2_BASEADDR);
+#define SPI3 ((SPI_RegDef_t *)SPI3_BASEADDR);
+#define SPI4 ((SPI_RegDef_t *)SPI4_BASEADDR);
+#define SPI5 ((SPI_RegDef_t *)SPI5_BASEADDR);
+#define SPI6 ((SPI_RegDef_t *)SPI6_BASEADDR);
 
+#define I2C1 ((I2C_RegDef_t *)I2C1_BASEADDR);
+#define I2C2 ((I2C_RegDef_t *)I2C2_BASEADDR);
+#define I2C3 ((I2C_RegDef_t *)I2C3_BASEADDR);
 
+#define USART1 ((USART_RegDef_t *)USART1_BASEADDR);
+#define USART2 ((USART_RegDef_t *)USART2_BASEADDR);
+#define USART3 ((USART_RegDef_t *)USART3_BASEADDR);
+#define UART4 ((USART_RegDef_t *)UART4_BASEADDR);
+#define UART5 ((USART_RegDef_t *)UART5_BASEADDR);
+#define USART6 ((USART_RegDef_t *)USART6_BASEADDR);
+#define UART7 ((USART_RegDef_t *)UART7_BASEADDR);
+#define UART8 ((USART_RegDef_t *)UART8_BASEADDR);
 
+#define RCC ((RCC_RegDef_t *)RCC_BASEADDR);
+#define SYSCFG ((SYSCFG_RegDef_t *)SYSCFG_BASEADDR);
+#define EXTI ((EXTI_RegDef_t *)EXTI_BASEADDR);
 
+/********************** clock enable-disable macros **********************  */
 
+#define GPIOA_CLK_EN() (RCC->AHB1ENR | (1 << 0))
+#define GPIOB_CLK_EN() (RCC->AHB1ENR | (1 << 1))
+#define GPIOC_CLK_EN() (RCC->AHB1ENR | (1 << 2))
+#define GPIOD_CLK_EN() (RCC->AHB1ENR | (1 << 3))
+#define GPIOE_CLK_EN() (RCC->AHB1ENR | (1 << 4))
+#define GPIOF_CLK_EN() (RCC->AHB1ENR | (1 << 5))
+#define GPIOG_CLK_EN() (RCC->AHB1ENR | (1 << 6))
+#define GPIOH_CLK_EN() (RCC->AHB1ENR | (1 << 7))
+#define GPIOI_CLK_EN() (RCC->AHB1ENR | (1 << 8))
+/* #define GPIOJ_CLK_EN()(RCC->AHB1ENR | (1<<9))
+#define GPIOK_CLK_EN()(RCC->AHB1ENR | (1<<10)) */
 
+#define SPI1_CLK_EN() (RCC->APB2ENR | (1 << 12));
+#define SPI2_CLK_ENR() (RCC->APB1ENR | (1 << 14));
+#define SPI3_CLK_ENR() (RCC->APB1ENR | (1 << 15));
+#define SPI4_CLK_ENR() (RCC->APB2ENR | (1 << 13));
+#define SPI5_CLK_ENR() (RCC->APB2ENR | (1 << 20));
+#define SPI6_CLK_ENR() (RCC->APB2ENR | (1 << 21));
 
+#define I2C1_CLK_ENR() (RCC->APB1ENR | (1 << 21));
+#define I2C2_CLK_ENR() (RCC->APB1ENR | (1 << 22));
+#define I2C3_CLK_ENR() (RCC->APB1ENR | (1 << 23));
 
+#define USART1_CLK_ENR() (RCC->APB2ENR | (1 << 4));
+#define USART2_CLK_ENR() (RCC->APB1ENR | (1 << 17));
+#define USART3_CLK_ENR() (RCC->APB1ENR | (1 << 18));
+#define UART4_CLK_ENR() (RCC->APB1ENR | (1 << 19));
+#define UART5_CLK_ENR() (RCC->APB1ENR | (1 << 20));
+#define USART6_CLK_ENR() (RCC->APB2ENR | (1 << 5));
+#define UART7_CLK_ENR() (RCC->APB1ENR | (1 << 30));
+#define UART8_CLK_ENR() (RCC->APB1ENR | (1 << 31));
 
-
-
-
-
-
+#define SYSCFG_CLK_ENR() (RCC->APB2ENR | (1 << 14));
 
 #endif /* STM32F407xx_H_ */
