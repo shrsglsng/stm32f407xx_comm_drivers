@@ -8,6 +8,13 @@
 
 - clock enable-disable macros for all peripherals
 
+- gpio base address to port code
+
+- IRQ numbers for each peripheral interrupt type
+
+- control + status register bit position definition
+
+
 */
 
 #ifndef STM32F407xx_H_
@@ -299,38 +306,283 @@ typedef struct
 
 /********************** clock enable-disable macros **********************  */
 
-#define GPIOA_CLK_EN() (RCC->AHB1ENR | (1 << 0))
-#define GPIOB_CLK_EN() (RCC->AHB1ENR | (1 << 1))
-#define GPIOC_CLK_EN() (RCC->AHB1ENR | (1 << 2))
-#define GPIOD_CLK_EN() (RCC->AHB1ENR | (1 << 3))
-#define GPIOE_CLK_EN() (RCC->AHB1ENR | (1 << 4))
-#define GPIOF_CLK_EN() (RCC->AHB1ENR | (1 << 5))
-#define GPIOG_CLK_EN() (RCC->AHB1ENR | (1 << 6))
-#define GPIOH_CLK_EN() (RCC->AHB1ENR | (1 << 7))
-#define GPIOI_CLK_EN() (RCC->AHB1ENR | (1 << 8))
+#define GPIOA_CLK_EN() (RCC->AHB1ENR |= (1 << 0))
+#define GPIOB_CLK_EN() (RCC->AHB1ENR |= (1 << 1))
+#define GPIOC_CLK_EN() (RCC->AHB1ENR |= (1 << 2))
+#define GPIOD_CLK_EN() (RCC->AHB1ENR |= (1 << 3))
+#define GPIOE_CLK_EN() (RCC->AHB1ENR |= (1 << 4))
+#define GPIOF_CLK_EN() (RCC->AHB1ENR |= (1 << 5))
+#define GPIOG_CLK_EN() (RCC->AHB1ENR |=(1 << 6))
+#define GPIOH_CLK_EN() (RCC->AHB1ENR |= (1 << 7))
+#define GPIOI_CLK_EN() (RCC->AHB1ENR |= (1 << 8))
 /* #define GPIOJ_CLK_EN()(RCC->AHB1ENR | (1<<9))
 #define GPIOK_CLK_EN()(RCC->AHB1ENR | (1<<10)) */
 
-#define SPI1_CLK_EN() (RCC->APB2ENR | (1 << 12));
-#define SPI2_CLK_ENR() (RCC->APB1ENR | (1 << 14));
-#define SPI3_CLK_ENR() (RCC->APB1ENR | (1 << 15));
-#define SPI4_CLK_ENR() (RCC->APB2ENR | (1 << 13));
-#define SPI5_CLK_ENR() (RCC->APB2ENR | (1 << 20));
-#define SPI6_CLK_ENR() (RCC->APB2ENR | (1 << 21));
+#define SPI1_CLK_EN() (RCC->APB2ENR |= (1 << 12));
+#define SPI2_CLK_EN() (RCC->APB1ENR |= (1 << 14));
+#define SPI3_CLK_EN() (RCC->APB1ENR |= (1 << 15));
+#define SPI4_CLK_EN() (RCC->APB2ENR |= (1 << 13));
+#define SPI5_CLK_EN() (RCC->APB2ENR |= (1 << 20));
+#define SPI6_CLK_EN() (RCC->APB2ENR |= (1 << 21));
 
-#define I2C1_CLK_ENR() (RCC->APB1ENR | (1 << 21));
-#define I2C2_CLK_ENR() (RCC->APB1ENR | (1 << 22));
-#define I2C3_CLK_ENR() (RCC->APB1ENR | (1 << 23));
+#define I2C1_CLK_EN() (RCC->APB1ENR |= (1 << 21));
+#define I2C2_CLK_EN() (RCC->APB1ENR |= (1 << 22));
+#define I2C3_CLK_EN() (RCC->APB1ENR |= (1 << 23));
 
-#define USART1_CLK_ENR() (RCC->APB2ENR | (1 << 4));
-#define USART2_CLK_ENR() (RCC->APB1ENR | (1 << 17));
-#define USART3_CLK_ENR() (RCC->APB1ENR | (1 << 18));
-#define UART4_CLK_ENR() (RCC->APB1ENR | (1 << 19));
-#define UART5_CLK_ENR() (RCC->APB1ENR | (1 << 20));
-#define USART6_CLK_ENR() (RCC->APB2ENR | (1 << 5));
-#define UART7_CLK_ENR() (RCC->APB1ENR | (1 << 30));
-#define UART8_CLK_ENR() (RCC->APB1ENR | (1 << 31));
+#define USART1_CLK_EN() (RCC->APB2ENR |= (1 << 4));
+#define USART2_CLK_EN() (RCC->APB1ENR |= (1 << 17));
+#define USART3_CLK_EN() (RCC->APB1ENR |= (1 << 18));
+#define UART4_CLK_EN() (RCC->APB1ENR |= (1 << 19));
+#define UART5_CLK_EN() (RCC->APB1ENR |= (1 << 20));
+#define USART6_CLK_EN() (RCC->APB2ENR |= (1 << 5));
+#define UART7_CLK_EN() (RCC->APB1ENR |= (1 << 30));
+#define UART8_CLK_EN() (RCC->APB1ENR |= (1 << 31));
 
-#define SYSCFG_CLK_ENR() (RCC->APB2ENR | (1 << 14));
+#define SYSCFG_CLK_EN() (RCC->APB2ENR |= (1 << 14));
+
+/* clock disable macros */
+
+#define GPIOA_CLK_DIS() (RCC->AHB1ENR &= (0 << 0))
+#define GPIOB_CLK_DIS() (RCC->AHB1ENR &= (0 << 1))
+#define GPIOC_CLK_DIS() (RCC->AHB1ENR &= (0 << 2))
+#define GPIOD_CLK_DIS() (RCC->AHB1ENR &= (0 << 3))
+#define GPIOE_CLK_DIS() (RCC->AHB1ENR &= (0 << 4))
+#define GPIOF_CLK_DIS() (RCC->AHB1ENR &= (0 << 5))
+#define GPIOG_CLK_DIS() (RCC->AHB1ENR &= (0 << 6))
+#define GPIOH_CLK_DIS() (RCC->AHB1ENR &= (0 << 7))
+#define GPIOI_CLK_DIS() (RCC->AHB1ENR &=(0 << 8))
+
+#define SPI1_CLK_DIS() (RCC->APB2ENR &= (0 << 12));
+#define SPI2_CLK_DIS() (RCC->APB1ENR &= (0 << 14));
+#define SPI3_CLK_DIS() (RCC->APB1ENR &= (0 << 15));
+#define SPI4_CLK_DIS() (RCC->APB2ENR &= (0 << 13));
+#define SPI5_CLK_DIS() (RCC->APB2ENR &= (0 << 20));
+#define SPI6_CLK_DIS() (RCC->APB2ENR &= (0 << 21));
+
+#define I2C1_CLK_DIS() (RCC->APB1ENR &= (0 << 21));
+#define I2C2_CLK_DIS() (RCC->APB1ENR &= (0 << 22));
+#define I2C3_CLK_DIS() (RCC->APB1ENR &= (0 << 23));
+
+#define USART1_CLK_DIS() (RCC->APB2ENR &= (0 << 4));
+#define USART2_CLK_DIS() (RCC->APB1ENR &= (0 << 17));
+#define USART3_CLK_DIS() (RCC->APB1ENR &= (0 << 18));
+#define UART4_CLK_DIS() (RCC->APB1ENR &= (0 << 19));
+#define UART5_CLK_DIS() (RCC->APB1ENR &= (0 << 20));
+#define USART6_CLK_DIS() (RCC->APB2ENR &= (0 << 5));
+#define UART7_CLK_DIS() (RCC->APB1ENR &= (0 << 30));
+#define UART8_CLK_DIS() (RCC->APB1ENR &= (0 << 31));
+
+#define SYSCFG_CLK_DIS() (RCC->APB2ENR &= (0 << 14));
+
+/* GPIO reset macros */
+/* reason to set reset a bit is to simulate the expected reset event i.e high to low transition */
+
+#define GPIOA_RESET() do{(RCC->AHB1RSTR |= (1 << 0)); (RCC->AHB1RSTR & ~(1 << 0)); } while(0)
+#define GPIOB_RESET() do{(RCC->AHB1RSTR |= (1 << 1)); (RCC->AHB1RSTR & ~(1 << 1)); } while(0)
+#define GPIOC_RESET() do{(RCC->AHB1RSTR |= (1 << 2)); (RCC->AHB1RSTR & ~(1 << 2)); } while(0)
+#define GPIOD_RESET() do{(RCC->AHB1RSTR |= (1 << 3)); (RCC->AHB1RSTR & ~(1 << 3)); } while(0)
+#define GPIOE_RESET() do{(RCC->AHB1RSTR |= (1 << 4)); (RCC->AHB1RSTR & ~(1 << 4)); } while(0)
+#define GPIOF_RESET() do{(RCC->AHB1RSTR |= (1 << 5)); (RCC->AHB1RSTR & ~(1 << 5)); } while(0)
+#define GPIOG_RESET() do{(RCC->AHB1RSTR |= (1 << 6)); (RCC->AHB1RSTR & ~(1 << 6)); } while(0)
+#define GPIOH_RESET() do{(RCC->AHB1RSTR |= (1 << 7)); (RCC->AHB1RSTR & ~(1 << 7)); } while(0)
+#define GPIOI_RESET() do{(RCC->AHB1RSTR |= (1 << 8)); (RCC->AHB1RSTR & ~(1 << 8)); } while(0)
+
+
+/* base address to port code */
+
+#define GPIO_BASEADDR_TO_CODE(x)        ((x == GPIOA)?0:\
+                                        (x == GPIOB)?1:\
+                                        (x == GPIOC)?2:\
+                                        (x == GPIOD)?3:\
+                                        (x == GPIOD)?4:\
+                                        (x == GPIOD)?5:\
+                                        (x == GPIOD)?6:\
+                                        (x == GPIOD)?7:\
+                                        (x == GPIOD)?8:0\
+                                    )
+
+/* IRQ number of peripheral interrupts */
+
+#define IRQ_NO_EXTI0 6
+#define IRQ_NO_EXTI1 7
+#define IRQ_NO_EXTI2 8
+#define IRQ_NO_EXTI3 9
+#define IRQ_NO_EXTI4 10
+#define IRQ_NO_EXTI9_5 23
+#define IRQ_NO_EXTI15_10 40
+
+#define IRQ_NO_I2C1_EV 31
+#define IRQ_NO_I2C1_ER 32
+#define IRQ_NO_I2C2_EV 33
+#define IRQ_NO_I2C2_ER 34
+#define IRQ_NO_I2C3_ER 72
+#define IRQ_NO_I2C3_ER 73
+
+#define IRQ_NO_SPI1 35
+#define IRQ_NO_SPI2 36
+#define IRQ_NO_SPI3 51
+
+#define IRQ_NO_USART1 37
+#define IRQ_NO_USART2 38
+#define IRQ_NO_USART3 39
+#define IRQ_NO_UART4 52
+#define IRQ_NO_UART5 53
+#define IRQ_NO_USART6 71
+
+/* control and status register bit position definition */
+
+#define SPI_CR1_CPHA 0
+#define SPI_CR1_CPOL 1
+#define SPI_CR1_MSTR 2
+#define SPI_CR1__BR 3
+#define SPI_CR1_SPE 6
+#define SPI_CR1__LSBFIRST 7
+#define SPI_CR1_SSI 8
+#define SPI_CR1__SSM 9
+#define SPI_CR1_RXONLY 10
+#define SPI_CR1_DFF 11
+#define SPI_CR1_CRCNEXT 12
+#define SPI_CR1_CRCEN 13
+#define SPI_CR1_BIDIOE 14
+#define SPI_CR1_BIDIMODE 15
+
+#define SPI_CR2_RXDMAEN 0
+#define SPI_CR2_TXDMAEN 1
+#define SPI_CR2_SSOE 2
+#define SPI_CR2_FRF 4
+#define SPI_CR2_ERRIE 5
+#define SPI_CR2_RXNEIE 6
+#define SPI_CR2_TXEIE 7
+
+#define SPI_SR_RXNE 0
+#define SPI_SR_TXE 1
+#define SPI_SR_CHSIDE 2
+#define SPI_SR_UDR 3
+#define SPI_SR_CRCERR 4
+#define SPI_SR_MODF 5
+#define SPI_SR_OVR 6
+#define SPI_SR_BSY 7
+#define SPI_SR_FRE 8
+
+#define I2C_CR1_PE  0
+#define I2C_CR1_SMBUS   1
+#define I2C_CR1_SMBTYPE 3
+#define I2C_CR1_ENARP 4
+#define I2C_CR1_ENPEC 5
+#define I2C_CR1_ENGC 6
+#define I2C_CR1_NOSTRETCH 7
+#define I2C_CR1_START 8
+#define I2C_CR1__STOP 9
+#define I2C_CR1_ACK 10
+#define I2C_CR1__POS 11
+#define I2C_CR1_PEC 12
+#define I2C_CR1_ALERT 13
+#define I2C_CR1_RESET 15
+
+#define I2C_CR2_FREQ 0
+#define I2C_CR2_ITERREN 8
+#define I2C_CR2_ITEVTEN 9
+#define I2C_CR2_ITBUFEN 10
+#define I2C_CR2_DMAEN 11
+#define I2C_CR2_LAST 12
+
+#define I2C_OAR1_ADD0 0
+#define I2C_OAR1_ADD7_1 1
+#define I2C_OAR1_ADD9_8 8
+#define I2C_OAR1_ADDMODE 15
+
+#define I2C_OAR2_ENDUAL 0
+#define I2C_OAR2_ADD2_7_1 1
+
+#define I2C_SR1_SB 0
+#define I2C_SR1_ADDR 1
+#define I2C_SR1_BTF 2
+#define I2C_SR1_ADD10 3
+#define I2C_SR1_STOPF 4
+#define I2C_SR1_RxNE 6
+#define I2C_SR1_TxE 7
+#define I2C_SR1_BERR 8
+#define I2C_SR1_ARLO 9
+#define I2C_SR1_AF 10
+#define I2C_SR1_OVR 11
+#define I2C_SR1_PECERR 12
+#define I2C_SR1_TIMEOUT 14
+#define I2C_SR1_SMBALERT 15
+
+#define I2C_SR2_MSL 0
+#define I2C_SR2_BUSY 1
+#define I2C_SR2_TRA 2
+#define I2C_SR2_GENCALL 4
+#define I2C_SR2_SMBDEFAULT 5
+#define I2C_SR2_SMBHOST 6
+#define I2C_SR2_DUALF 7
+#define I2C_SR2_PEC 8
+
+#define I2C_CCR_CCR 0
+#define I2C_CCR_DUTY 14
+#define I2C_CCR_FS 15
+
+#define USART_SR_PE 0
+#define USART_SR_FE 1
+#define USART_SR_NF 2
+#define USART_SR_ORE 3
+#define USART_SR_IDLE 4
+#define USART_SR_RXNE 5
+#define USART_SR_TC 6
+#define USART_SR_TXE 7
+#define USART_SR_LBD 8
+#define USART_SR_CTS 9
+
+#define USART_CR1_SBK 0
+#define USART_CR1__RWU 1
+#define USART_CR1_RE 2
+#define USART_CR1_TE 3
+#define USART_CR1_IDLEIE 4
+#define USART_CR1_RXNEIE 5
+#define USART_CR1_TCIE 6
+#define USART_CR1_TXEIE 7
+#define USART_CR1_PEIE 8
+#define USART_CR1_PS 9
+#define USART_CR1_PCE 10
+#define USART_CR1_WAKE 11
+#define USART_CR1_M 12
+#define USART_CR1_UE 13
+#define USART_CR1_OVER8 15
+
+#define USART_CR2_ADD 0
+#define USART_CR2_LBDL 5
+#define USART_CR2_LBDIE 6
+#define USART_CR2_LBCL 8
+#define USART_CR2_CPHA 9
+#define USART_CR2_CPOL 10
+#define USART_CR2_CLKEN 11
+#define USART_CR2_STOP 12
+#define USART_CR2_LINEN 14
+
+#define USART_CR3_EIE 0
+#define USART_CR3_IREN 1
+#define USART_CR3_IRLP 2
+#define USART_CR3_HDSEL 3
+#define USART_CR3_NACK 4
+#define USART_CR3_SCEN 5
+#define USART_CR3_DMAR 6
+#define USART_CR3_DMAT 7
+#define USART_CR3_RTSE 8
+#define USART_CR3_CTSE 9
+#define USART_CR3_CTSIE 10
+#define USART_CR3_ONEBIT 11
+
+/* general */
+
+#define SET 1
+#define RESET 0
+#define ENABLE 1
+#define DISABLE 0
+#define GPIO_SET SET
+#define GPIO_RESET RESET
+#define FLAG_SET SET
+#define FLAG_RESET RESET
+
+/* include peripheral specific header files below */
 
 #endif /* STM32F407xx_H_ */
