@@ -28,6 +28,24 @@
 
 /********************** Processor Specific Details **********************  */
 
+/* ISER interrupt set-enable register*/
+
+#define NVIC_ISER0 (__vo uint32_t *) 0xE000E100 // config irq number from 0-31
+#define NVIC_ISER1 (__vo uint32_t *) 0xE000E104 // 32-63
+#define NVIC_ISER2 (__vo uint32_t *) 0xE000E108 // 64-95 (there are 81 interrupts for stm32f407xx, so ISER2 is sufficient)
+#define NVIC_ISER3 (__vo uint32_t *) 0xE000E10C
+
+/* ICER interrupt clear-enable register */
+
+#define NVIC_ICER0 (__vo uint32_t *) 0xE000E180
+#define NVIC_ICER1 (__vo uint32_t *) 0xE000E184
+#define NVIC_ICER2 (__vo uint32_t *) 0xE000E188
+#define NVIC_ICER3 (__vo uint32_t *) 0xE000E18C
+
+#define NVIC_PR_BASEADDR (__vo uint32_t *)0xE000E400
+
+#define NO_PR_BITS_IMPLEMENTED 4        //only msb 4 bits are used for setting priority in the priority register, remaining are reserved. This is specific to STM
+
 /* base addresses of Flash and SRAM memories */
 
 #define FLASH_BASEADDR 0x08000000U
@@ -266,43 +284,45 @@ typedef struct
     __vo uint32_t GTPR;
 } USART_RegDef_t;
 
+/* peripheral instances are pointers, (RegDef_t *) */
+
 /* peripheral instance to RegDef mapping */
 
-#define GPIOA ((GPIO_RegDef_t *)GPIOA_BASEADDR);
-#define GPIOB ((GPIO_RegDef_t *)GPIOB_BASEADDR);
-#define GPIOC ((GPIO_RegDef_t *)GPIOC_BASEADDR);
-#define GPIOD ((GPIO_RegDef_t *)GPIOD_BASEADDR);
-#define GPIOE ((GPIO_RegDef_t *)GPIOE_BASEADDR);
-#define GPIOF ((GPIO_RegDef_t *)GPIOF_BASEADDR);
-#define GPIOG ((GPIO_RegDef_t *)GPIOG_BASEADDR);
-#define GPIOH ((GPIO_RegDef_t *)GPIOH_BASEADDR);
-#define GPIOI ((GPIO_RegDef_t *)GPIOI_BASEADDR);
-#define GPIOJ ((GPIO_RegDef_t *)GPIOJ_BASEADDR);
-#define GPIOK ((GPIO_RegDef_t *)GPIOK_BASEADDR);
+#define GPIOA ((GPIO_RegDef_t *)GPIOA_BASEADDR)
+#define GPIOB ((GPIO_RegDef_t *)GPIOB_BASEADDR)
+#define GPIOC ((GPIO_RegDef_t *)GPIOC_BASEADDR)
+#define GPIOD ((GPIO_RegDef_t *)GPIOD_BASEADDR)
+#define GPIOE ((GPIO_RegDef_t *)GPIOE_BASEADDR)
+#define GPIOF ((GPIO_RegDef_t *)GPIOF_BASEADDR)
+#define GPIOG ((GPIO_RegDef_t *)GPIOG_BASEADDR)
+#define GPIOH ((GPIO_RegDef_t *)GPIOH_BASEADDR)
+#define GPIOI ((GPIO_RegDef_t *)GPIOI_BASEADDR)
+#define GPIOJ ((GPIO_RegDef_t *)GPIOJ_BASEADDR)
+#define GPIOK ((GPIO_RegDef_t *)GPIOK_BASEADDR)
 
-#define SPI1 ((SPI_RegDef_t *)SPI1_BASEADDR);
-#define SPI2 ((SPI_RegDef_t *)SPI2_BASEADDR);
-#define SPI3 ((SPI_RegDef_t *)SPI3_BASEADDR);
-#define SPI4 ((SPI_RegDef_t *)SPI4_BASEADDR);
-#define SPI5 ((SPI_RegDef_t *)SPI5_BASEADDR);
-#define SPI6 ((SPI_RegDef_t *)SPI6_BASEADDR);
+#define SPI1 ((SPI_RegDef_t *)SPI1_BASEADDR)
+#define SPI2 ((SPI_RegDef_t *)SPI2_BASEADDR)
+#define SPI3 ((SPI_RegDef_t *)SPI3_BASEADDR)
+#define SPI4 ((SPI_RegDef_t *)SPI4_BASEADDR)
+#define SPI5 ((SPI_RegDef_t *)SPI5_BASEADDR)
+#define SPI6 ((SPI_RegDef_t *)SPI6_BASEADDR)
 
-#define I2C1 ((I2C_RegDef_t *)I2C1_BASEADDR);
-#define I2C2 ((I2C_RegDef_t *)I2C2_BASEADDR);
-#define I2C3 ((I2C_RegDef_t *)I2C3_BASEADDR);
+#define I2C1 ((I2C_RegDef_t *)I2C1_BASEADDR)
+#define I2C2 ((I2C_RegDef_t *)I2C2_BASEADDR)
+#define I2C3 ((I2C_RegDef_t *)I2C3_BASEADDR)
 
-#define USART1 ((USART_RegDef_t *)USART1_BASEADDR);
-#define USART2 ((USART_RegDef_t *)USART2_BASEADDR);
-#define USART3 ((USART_RegDef_t *)USART3_BASEADDR);
-#define UART4 ((USART_RegDef_t *)UART4_BASEADDR);
-#define UART5 ((USART_RegDef_t *)UART5_BASEADDR);
-#define USART6 ((USART_RegDef_t *)USART6_BASEADDR);
-#define UART7 ((USART_RegDef_t *)UART7_BASEADDR);
-#define UART8 ((USART_RegDef_t *)UART8_BASEADDR);
+#define USART1 ((USART_RegDef_t *)USART1_BASEADDR)
+#define USART2 ((USART_RegDef_t *)USART2_BASEADDR)
+#define USART3 ((USART_RegDef_t *)USART3_BASEADDR)
+#define UART4 ((USART_RegDef_t *)UART4_BASEADDR)
+#define UART5 ((USART_RegDef_t *)UART5_BASEADDR)
+#define USART6 ((USART_RegDef_t *)USART6_BASEADDR)
+#define UART7 ((USART_RegDef_t *)UART7_BASEADDR)
+#define UART8 ((USART_RegDef_t *)UART8_BASEADDR)
 
-#define RCC ((RCC_RegDef_t *)RCC_BASEADDR);
-#define SYSCFG ((SYSCFG_RegDef_t *)SYSCFG_BASEADDR);
-#define EXTI ((EXTI_RegDef_t *)EXTI_BASEADDR);
+#define RCC ((RCC_RegDef_t *)RCC_BASEADDR)
+#define SYSCFG ((SYSCFG_RegDef_t *)SYSCFG_BASEADDR)
+#define EXTI ((EXTI_RegDef_t *)EXTI_BASEADDR)
 
 /********************** clock enable-disable macros **********************  */
 
@@ -312,7 +332,7 @@ typedef struct
 #define GPIOD_CLK_EN() (RCC->AHB1ENR |= (1 << 3))
 #define GPIOE_CLK_EN() (RCC->AHB1ENR |= (1 << 4))
 #define GPIOF_CLK_EN() (RCC->AHB1ENR |= (1 << 5))
-#define GPIOG_CLK_EN() (RCC->AHB1ENR |=(1 << 6))
+#define GPIOG_CLK_EN() (RCC->AHB1ENR |= (1 << 6))
 #define GPIOH_CLK_EN() (RCC->AHB1ENR |= (1 << 7))
 #define GPIOI_CLK_EN() (RCC->AHB1ENR |= (1 << 8))
 /* #define GPIOJ_CLK_EN()(RCC->AHB1ENR | (1<<9))
@@ -350,7 +370,7 @@ typedef struct
 #define GPIOF_CLK_DIS() (RCC->AHB1ENR &= (0 << 5))
 #define GPIOG_CLK_DIS() (RCC->AHB1ENR &= (0 << 6))
 #define GPIOH_CLK_DIS() (RCC->AHB1ENR &= (0 << 7))
-#define GPIOI_CLK_DIS() (RCC->AHB1ENR &=(0 << 8))
+#define GPIOI_CLK_DIS() (RCC->AHB1ENR &= (0 << 8))
 
 #define SPI1_CLK_DIS() (RCC->APB2ENR &= (0 << 12));
 #define SPI2_CLK_DIS() (RCC->APB1ENR &= (0 << 14));
@@ -377,29 +397,72 @@ typedef struct
 /* GPIO reset macros */
 /* reason to set reset a bit is to simulate the expected reset event i.e high to low transition */
 
-#define GPIOA_RESET() do{(RCC->AHB1RSTR |= (1 << 0)); (RCC->AHB1RSTR & ~(1 << 0)); } while(0)
-#define GPIOB_RESET() do{(RCC->AHB1RSTR |= (1 << 1)); (RCC->AHB1RSTR & ~(1 << 1)); } while(0)
-#define GPIOC_RESET() do{(RCC->AHB1RSTR |= (1 << 2)); (RCC->AHB1RSTR & ~(1 << 2)); } while(0)
-#define GPIOD_RESET() do{(RCC->AHB1RSTR |= (1 << 3)); (RCC->AHB1RSTR & ~(1 << 3)); } while(0)
-#define GPIOE_RESET() do{(RCC->AHB1RSTR |= (1 << 4)); (RCC->AHB1RSTR & ~(1 << 4)); } while(0)
-#define GPIOF_RESET() do{(RCC->AHB1RSTR |= (1 << 5)); (RCC->AHB1RSTR & ~(1 << 5)); } while(0)
-#define GPIOG_RESET() do{(RCC->AHB1RSTR |= (1 << 6)); (RCC->AHB1RSTR & ~(1 << 6)); } while(0)
-#define GPIOH_RESET() do{(RCC->AHB1RSTR |= (1 << 7)); (RCC->AHB1RSTR & ~(1 << 7)); } while(0)
-#define GPIOI_RESET() do{(RCC->AHB1RSTR |= (1 << 8)); (RCC->AHB1RSTR & ~(1 << 8)); } while(0)
-
+#define GPIOA_RESET()                \
+    do                               \
+    {                                \
+        (RCC->AHB1RSTR |= (1 << 0)); \
+        (RCC->AHB1RSTR & ~(1 << 0)); \
+    } while (0)
+#define GPIOB_RESET()                \
+    do                               \
+    {                                \
+        (RCC->AHB1RSTR |= (1 << 1)); \
+        (RCC->AHB1RSTR & ~(1 << 1)); \
+    } while (0)
+#define GPIOC_RESET()                \
+    do                               \
+    {                                \
+        (RCC->AHB1RSTR |= (1 << 2)); \
+        (RCC->AHB1RSTR & ~(1 << 2)); \
+    } while (0)
+#define GPIOD_RESET()                \
+    do                               \
+    {                                \
+        (RCC->AHB1RSTR |= (1 << 3)); \
+        (RCC->AHB1RSTR & ~(1 << 3)); \
+    } while (0)
+#define GPIOE_RESET()                \
+    do                               \
+    {                                \
+        (RCC->AHB1RSTR |= (1 << 4)); \
+        (RCC->AHB1RSTR & ~(1 << 4)); \
+    } while (0)
+#define GPIOF_RESET()                \
+    do                               \
+    {                                \
+        (RCC->AHB1RSTR |= (1 << 5)); \
+        (RCC->AHB1RSTR & ~(1 << 5)); \
+    } while (0)
+#define GPIOG_RESET()                \
+    do                               \
+    {                                \
+        (RCC->AHB1RSTR |= (1 << 6)); \
+        (RCC->AHB1RSTR & ~(1 << 6)); \
+    } while (0)
+#define GPIOH_RESET()                \
+    do                               \
+    {                                \
+        (RCC->AHB1RSTR |= (1 << 7)); \
+        (RCC->AHB1RSTR & ~(1 << 7)); \
+    } while (0)
+#define GPIOI_RESET()                \
+    do                               \
+    {                                \
+        (RCC->AHB1RSTR |= (1 << 8)); \
+        (RCC->AHB1RSTR & ~(1 << 8)); \
+    } while (0)
 
 /* base address to port code */
 
-#define GPIO_BASEADDR_TO_CODE(x)        ((x == GPIOA)?0:\
-                                        (x == GPIOB)?1:\
-                                        (x == GPIOC)?2:\
-                                        (x == GPIOD)?3:\
-                                        (x == GPIOD)?4:\
-                                        (x == GPIOD)?5:\
-                                        (x == GPIOD)?6:\
-                                        (x == GPIOD)?7:\
-                                        (x == GPIOD)?8:0\
-                                    )
+#define GPIO_BASEADDR_TO_CODE(x) ((x == GPIOA) ? 0 : (x == GPIOB) ? 1 \
+                                                 : (x == GPIOC)   ? 2 \
+                                                 : (x == GPIOD)   ? 3 \
+                                                 : (x == GPIOD)   ? 4 \
+                                                 : (x == GPIOD)   ? 5 \
+                                                 : (x == GPIOD)   ? 6 \
+                                                 : (x == GPIOD)   ? 7 \
+                                                 : (x == GPIOD)   ? 8 \
+                                                                  : 0)
 
 /* IRQ number of peripheral interrupts */
 
@@ -464,8 +527,8 @@ typedef struct
 #define SPI_SR_BSY 7
 #define SPI_SR_FRE 8
 
-#define I2C_CR1_PE  0
-#define I2C_CR1_SMBUS   1
+#define I2C_CR1_PE 0
+#define I2C_CR1_SMBUS 1
 #define I2C_CR1_SMBTYPE 3
 #define I2C_CR1_ENARP 4
 #define I2C_CR1_ENPEC 5
