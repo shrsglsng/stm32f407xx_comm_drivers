@@ -61,6 +61,39 @@ void GPIO_Init(GPIO_Handle_t *GPIOHandle)
 
     else
     {
+        if (GPIOHandle->GPIO_PinConfig.GPIO_Mode == GPIO_MODE_IT_RT)
+        {
+            EXTI->RTSR |= (1 << GPIOHandle->GPIO_PinConfig.GPIO_PinNumber);  // set rising trigger reg
+            EXTI->FTSR &= ~(1 << GPIOHandle->GPIO_PinConfig.GPIO_PinNumber); // reset falling trigger reg
+        }
+        else if (GPIOHandle->GPIO_PinConfig.GPIO_Mode == GPIO_MODE_IT_FT)
+        {
+            EXTI->FTSR |= (1 << GPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+            EXTI->RTSR &= ~(1 << GPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+        }
+        else if (GPIOHandle->GPIO_PinConfig.GPIO_Mode == GPIO_MODE_IT_RFT)
+        {
+            EXTI->FTSR |= (1 << GPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+            EXTI->RTSR |= (1 << GPIOHandle->GPIO_PinConfig.GPIO_PinNumber);
+        }
+
+        /* now GPIOx_0 interrupt is delivered through EXTI0, GPIOx_1 through EXTI1, GPIOx_2 through EXTI2... but pin number of which port? */
+        /* by default port A has control over all exti lines, this can be changed in syscfg_exticr register */
+
+        uint8_t temp1 = GPIOHandle->GPIO_PinConfig.GPIO_PinNumber / 4;
+        uint8_t temp2 = GPIOHandle->GPIO_PinConfig.GPIO_PinNumber % 4;
+
+        uint8_t  port_code = GPIO_BASEADDR_TO_CODE(GPIOHandle->GPIOx);
+
+        SYSCFG_CLK_EN();
+
+        SYSCFG->EXTICR[temp1] = port_code << (temp2 * 4);   //each exticr subset is of 4 bits
+
+        /* enable the exti interrupt delivery using IMR */
+
+        EXTI->IMR |= 1 << GPIOHandle->GPIO_PinConfig.GPIO_PinNumber;    //(why?)
+
+
     }
 
     /* configuring port speed */

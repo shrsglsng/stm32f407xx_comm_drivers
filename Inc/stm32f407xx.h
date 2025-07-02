@@ -198,12 +198,11 @@ typedef struct
 
     __vo uint32_t MEMRMP;
     __vo uint32_t PMC;
-    __vo uint32_t EXTICR1;
-    __vo uint32_t EXTICR2;
-    __vo uint32_t EXTICR3;
-    __vo uint32_t EXTICR4;
-    uint32_t RESERVED0[2];
+    __vo uint32_t EXTICR[4];
+    uint32_t RESERVED1[2];
     __vo uint32_t CMPCR;
+    __vo uint32_t RESERVED2[2];
+    __vo uint32_t CFGR;
 
 } SYSCFG_RegDef_t;
 
