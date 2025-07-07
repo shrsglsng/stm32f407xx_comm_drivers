@@ -300,8 +300,8 @@ typedef struct
 #define GPIOK ((GPIO_RegDef_t *)GPIOK_BASEADDR)
 
 #define SPI1 ((SPI_RegDef_t *)SPI1_BASEADDR)
-#define SPI2 ((SPI_RegDef_t *)SPI2_BASEADDR)
-#define SPI3 ((SPI_RegDef_t *)SPI3_BASEADDR)
+#define SPI2 ((SPI_RegDef_t *)SPI2_I2S2_BASEADDR)
+#define SPI3 ((SPI_RegDef_t *)SPI3_I2S3_BASEADDR)
 #define SPI4 ((SPI_RegDef_t *)SPI4_BASEADDR)
 #define SPI5 ((SPI_RegDef_t *)SPI5_BASEADDR)
 #define SPI6 ((SPI_RegDef_t *)SPI6_BASEADDR)
@@ -337,27 +337,27 @@ typedef struct
 /* #define GPIOJ_CLK_EN()(RCC->AHB1ENR | (1<<9))
 #define GPIOK_CLK_EN()(RCC->AHB1ENR | (1<<10)) */
 
-#define SPI1_CLK_EN() (RCC->APB2ENR |= (1 << 12));
-#define SPI2_CLK_EN() (RCC->APB1ENR |= (1 << 14));
-#define SPI3_CLK_EN() (RCC->APB1ENR |= (1 << 15));
-#define SPI4_CLK_EN() (RCC->APB2ENR |= (1 << 13));
-#define SPI5_CLK_EN() (RCC->APB2ENR |= (1 << 20));
-#define SPI6_CLK_EN() (RCC->APB2ENR |= (1 << 21));
+#define SPI1_CLK_EN() (RCC->APB2ENR |= (1 << 12))
+#define SPI2_CLK_EN() (RCC->APB1ENR |= (1 << 14))
+#define SPI3_CLK_EN() (RCC->APB1ENR |= (1 << 15))
+#define SPI4_CLK_EN() (RCC->APB2ENR |= (1 << 13))
+#define SPI5_CLK_EN() (RCC->APB2ENR |= (1 << 20))
+#define SPI6_CLK_EN() (RCC->APB2ENR |= (1 << 21))
 
-#define I2C1_CLK_EN() (RCC->APB1ENR |= (1 << 21));
-#define I2C2_CLK_EN() (RCC->APB1ENR |= (1 << 22));
-#define I2C3_CLK_EN() (RCC->APB1ENR |= (1 << 23));
+#define I2C1_CLK_EN() (RCC->APB1ENR |= (1 << 21))
+#define I2C2_CLK_EN() (RCC->APB1ENR |= (1 << 22))
+#define I2C3_CLK_EN() (RCC->APB1ENR |= (1 << 23))
 
-#define USART1_CLK_EN() (RCC->APB2ENR |= (1 << 4));
-#define USART2_CLK_EN() (RCC->APB1ENR |= (1 << 17));
-#define USART3_CLK_EN() (RCC->APB1ENR |= (1 << 18));
-#define UART4_CLK_EN() (RCC->APB1ENR |= (1 << 19));
-#define UART5_CLK_EN() (RCC->APB1ENR |= (1 << 20));
-#define USART6_CLK_EN() (RCC->APB2ENR |= (1 << 5));
-#define UART7_CLK_EN() (RCC->APB1ENR |= (1 << 30));
-#define UART8_CLK_EN() (RCC->APB1ENR |= (1 << 31));
+#define USART1_CLK_EN() (RCC->APB2ENR |= (1 << 4))
+#define USART2_CLK_EN() (RCC->APB1ENR |= (1 << 17))
+#define USART3_CLK_EN() (RCC->APB1ENR |= (1 << 18))
+#define UART4_CLK_EN() (RCC->APB1ENR |= (1 << 19))
+#define UART5_CLK_EN() (RCC->APB1ENR |= (1 << 20))
+#define USART6_CLK_EN() (RCC->APB2ENR |= (1 << 5))
+#define UART7_CLK_EN() (RCC->APB1ENR |= (1 << 30))
+#define UART8_CLK_EN() (RCC->APB1ENR |= (1 << 31))
 
-#define SYSCFG_CLK_EN() (RCC->APB2ENR |= (1 << 14));
+#define SYSCFG_CLK_EN() (RCC->APB2ENR |= (1 << 14))
 
 /* clock disable macros */
 
@@ -371,85 +371,108 @@ typedef struct
 #define GPIOH_CLK_DIS() (RCC->AHB1ENR &= (0 << 7))
 #define GPIOI_CLK_DIS() (RCC->AHB1ENR &= (0 << 8))
 
-#define SPI1_CLK_DIS() (RCC->APB2ENR &= (0 << 12));
-#define SPI2_CLK_DIS() (RCC->APB1ENR &= (0 << 14));
-#define SPI3_CLK_DIS() (RCC->APB1ENR &= (0 << 15));
-#define SPI4_CLK_DIS() (RCC->APB2ENR &= (0 << 13));
-#define SPI5_CLK_DIS() (RCC->APB2ENR &= (0 << 20));
-#define SPI6_CLK_DIS() (RCC->APB2ENR &= (0 << 21));
+#define SPI1_CLK_DIS() (RCC->APB2ENR &= (0 << 12))
+#define SPI2_CLK_DIS() (RCC->APB1ENR &= (0 << 14))
+#define SPI3_CLK_DIS() (RCC->APB1ENR &= (0 << 15))
+#define SPI4_CLK_DIS() (RCC->APB2ENR &= (0 << 13))
+#define SPI5_CLK_DIS() (RCC->APB2ENR &= (0 << 20))
+#define SPI6_CLK_DIS() (RCC->APB2ENR &= (0 << 21))
 
-#define I2C1_CLK_DIS() (RCC->APB1ENR &= (0 << 21));
-#define I2C2_CLK_DIS() (RCC->APB1ENR &= (0 << 22));
-#define I2C3_CLK_DIS() (RCC->APB1ENR &= (0 << 23));
+#define I2C1_CLK_DIS() (RCC->APB1ENR &= (0 << 21))
+#define I2C2_CLK_DIS() (RCC->APB1ENR &= (0 << 22))
+#define I2C3_CLK_DIS() (RCC->APB1ENR &= (0 << 23))
 
-#define USART1_CLK_DIS() (RCC->APB2ENR &= (0 << 4));
-#define USART2_CLK_DIS() (RCC->APB1ENR &= (0 << 17));
-#define USART3_CLK_DIS() (RCC->APB1ENR &= (0 << 18));
-#define UART4_CLK_DIS() (RCC->APB1ENR &= (0 << 19));
-#define UART5_CLK_DIS() (RCC->APB1ENR &= (0 << 20));
-#define USART6_CLK_DIS() (RCC->APB2ENR &= (0 << 5));
-#define UART7_CLK_DIS() (RCC->APB1ENR &= (0 << 30));
-#define UART8_CLK_DIS() (RCC->APB1ENR &= (0 << 31));
+#define USART1_CLK_DIS() (RCC->APB2ENR &= (0 << 4))
+#define USART2_CLK_DIS() (RCC->APB1ENR &= (0 << 17))
+#define USART3_CLK_DIS() (RCC->APB1ENR &= (0 << 18))
+#define UART4_CLK_DIS() (RCC->APB1ENR &= (0 << 19))
+#define UART5_CLK_DIS() (RCC->APB1ENR &= (0 << 20))
+#define USART6_CLK_DIS() (RCC->APB2ENR &= (0 << 5))
+#define UART7_CLK_DIS() (RCC->APB1ENR &= (0 << 30))
+#define UART8_CLK_DIS() (RCC->APB1ENR &= (0 << 31))
 
-#define SYSCFG_CLK_DIS() (RCC->APB2ENR &= (0 << 14));
+#define SYSCFG_CLK_DIS() (RCC->APB2ENR &= (0 << 14))
 
 /* GPIO reset macros */
-/* reason to set reset a bit is to simulate the expected reset event i.e high to low transition */
+/* reason to set+reset a bit is to simulate the expected reset event i.e high to low transition */
 
 #define GPIOA_RESET()                \
     do                               \
     {                                \
         (RCC->AHB1RSTR |= (1 << 0)); \
-        (RCC->AHB1RSTR & ~(1 << 0)); \
+        (RCC->AHB1RSTR &= ~(1 << 0)); \
     } while (0)
 #define GPIOB_RESET()                \
     do                               \
     {                                \
         (RCC->AHB1RSTR |= (1 << 1)); \
-        (RCC->AHB1RSTR & ~(1 << 1)); \
+        (RCC->AHB1RSTR &= ~(1 << 1)); \
     } while (0)
 #define GPIOC_RESET()                \
     do                               \
     {                                \
         (RCC->AHB1RSTR |= (1 << 2)); \
-        (RCC->AHB1RSTR & ~(1 << 2)); \
+        (RCC->AHB1RSTR &= ~(1 << 2)); \
     } while (0)
 #define GPIOD_RESET()                \
     do                               \
     {                                \
         (RCC->AHB1RSTR |= (1 << 3)); \
-        (RCC->AHB1RSTR & ~(1 << 3)); \
+        (RCC->AHB1RSTR &= ~(1 << 3)); \
     } while (0)
 #define GPIOE_RESET()                \
     do                               \
     {                                \
         (RCC->AHB1RSTR |= (1 << 4)); \
-        (RCC->AHB1RSTR & ~(1 << 4)); \
+        (RCC->AHB1RSTR &= ~(1 << 4)); \
     } while (0)
 #define GPIOF_RESET()                \
     do                               \
     {                                \
         (RCC->AHB1RSTR |= (1 << 5)); \
-        (RCC->AHB1RSTR & ~(1 << 5)); \
+        (RCC->AHB1RSTR &= ~(1 << 5)); \
     } while (0)
 #define GPIOG_RESET()                \
     do                               \
     {                                \
         (RCC->AHB1RSTR |= (1 << 6)); \
-        (RCC->AHB1RSTR & ~(1 << 6)); \
+        (RCC->AHB1RSTR &= ~(1 << 6)); \
     } while (0)
 #define GPIOH_RESET()                \
     do                               \
     {                                \
         (RCC->AHB1RSTR |= (1 << 7)); \
-        (RCC->AHB1RSTR & ~(1 << 7)); \
+        (RCC->AHB1RSTR &= ~(1 << 7)); \
     } while (0)
 #define GPIOI_RESET()                \
     do                               \
     {                                \
         (RCC->AHB1RSTR |= (1 << 8)); \
-        (RCC->AHB1RSTR & ~(1 << 8)); \
+        (RCC->AHB1RSTR &= ~(1 << 8)); \
     } while (0)
+
+ /* spi reset macros */
+
+ #define SPI1_RESET()                \
+    do                               \
+    {                                \
+        (RCC->APB2RSTR |= (1 << 12)); \
+        (RCC->APB2RSTR &= ~(1 << 12)); \
+    } while (0)
+
+#define SPI2_RESET()                \
+do                               \
+{                                \
+    (RCC->APB1RSTR |= (1 << 14)); \
+    (RCC->APB1RSTR &= ~(1 << 14)); \
+} while (0)
+
+#define SPI3_RESET()                \
+do                               \
+{                                \
+    (RCC->APB1RSTR |= (1 << 15)); \
+    (RCC->APB1RSTR &= ~(1 << 15)); \
+} while (0)
 
 /* base address to port code */
 
@@ -496,11 +519,11 @@ typedef struct
 #define SPI_CR1_CPHA 0
 #define SPI_CR1_CPOL 1
 #define SPI_CR1_MSTR 2
-#define SPI_CR1__BR 3
+#define SPI_CR1_BR 3
 #define SPI_CR1_SPE 6
-#define SPI_CR1__LSBFIRST 7
+#define SPI_CR1_LSBFIRST 7
 #define SPI_CR1_SSI 8
-#define SPI_CR1__SSM 9
+#define SPI_CR1_SSM 9
 #define SPI_CR1_RXONLY 10
 #define SPI_CR1_DFF 11
 #define SPI_CR1_CRCNEXT 12
@@ -646,5 +669,9 @@ typedef struct
 #define FLAG_RESET RESET
 
 /* include peripheral specific header files below */
+
+#include "stm32f407xx_gpio_driver.h"
+#include "stm32f407xx_spi_driver.h"
+#include "stm32f407xx_rcc_driver.h"
 
 #endif /* STM32F407xx_H_ */
