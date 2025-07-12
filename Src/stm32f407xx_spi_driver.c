@@ -260,6 +260,161 @@ step 1: first check what event/error caused the interrupt by checking the status
 step 2: handle each error with respective handler functions
  */
 
-void SPI_IRQHandling(SPI_Handle_t *SPIHandle)
+/* checking error/event type logic:
+- fist check SR for error bit set/reset
+- theen check in CR2 if that specific interrupt is en/dis
+ */
+
+void SPI_IRQHandling(SPI_Handle_t *pSPIHandle)
 {
+    uint8_t temp1, temp2;
+
+    /* checking for txe */
+
+    temp1 = ((pSPIHandle->pSPIx->SR >> SPI_SR_TXE) & 0x1);     // checking sr txe bit
+    temp2 = ((pSPIHandle->pSPIx->CR2 >> SPI_CR2_TXEIE) & 0x1); // checking if that interrupt is enabled (as spi interrupts are disabled by default)
+
+    if (temp1 && temp2)
+    {
+        spi_txe_handler(pSPIHandle);
+    }
+
+    /* checking for rxne */
+
+    temp1 = ((pSPIHandle->pSPIx->SR >> SPI_SR_RXNE) & 0x1);
+    temp2 = ((pSPIHandle->pSPIx->CR2 >> SPI_CR2_RXNEIE) & 0x1);
+
+    if (temp1 && temp2)
+    {
+        spi_rxe_handler(pSPIHandle);
+    }
+
+    /* checking overrun error */
+
+    temp1 = ((pSPIHandle->pSPIx->SR >> SPI_SR_OVR) & 0x1);
+    temp2 = ((pSPIHandle->pSPIx->CR2 >> SPI_CR2_ERRIE) & 0x1);
+
+    if (temp1 && temp2)
+    {
+        spi_ovr_handler(pSPIHandle);
+    }
+}
+
+static void spi_txe_handler(SPI_Handle_t *pSPIHandle)
+{
+    if ((pSPIHandle->pSPIx->CR1 >> SPI_CR1_DFF) & 0x1) // 16 bit dff
+    {
+        pSPIHandle->pSPIx->DR = *(uint16_t *)pSPIHandle->pTxBuffer;
+        (uint16_t *)pSPIHandle->pTxBuffer++;
+        pSPIHandle->TxLength--; // this is the reason we needed length ptxbuffer in the global scope. to access them in the handler functions
+        pSPIHandle->TxLength--;
+    }
+
+    else
+    {
+        pSPIHandle->pSPIx->DR = *pSPIHandle->pTxBuffer;
+        pSPIHandle->pTxBuffer--;
+        pSPIHandle->TxLength--;
+    }
+
+    /*
+    spi transmission complete logic:
+    step1: close the spi ctransmission channel
+    step2: inform the application through a callback function
+    */
+
+    /*
+    to close the spi;
+    step1: clear the txeie bit
+    step2: free pRxBuffer ptr and assign length=0
+    step3: set spi state as ready
+    */
+
+    if (!pSPIHandle->TxLength) // if transmission is complete
+    {
+        pSPIHandle->pSPIx->CR2 &= ~(1 << SPI_CR2_TXEIE);
+        free(pSPIHandle->pTxBuffer);
+        pSPIHandle->pTxBuffer = NULL;
+        pSPIHandle->TxLength = 0;
+        pSPIHandle->TxState = SPI_READY;
+
+        SPI_ApplicationEventCallback(pSPIHandle, SPI_EVENT_TX_COMPLETE);
+    }
+}
+
+static void spi_rxe_handler(SPI_Handle_t *pSPIHandle)
+{
+    if ((pSPIHandle->pSPIx->CR1 >> SPI_CR1_DFF) & 0x1)
+    {
+        *(uint16_t *)pSPIHandle->pRxBuffer = pSPIHandle->pSPIx->DR;
+        pSPIHandle->RxLength--;
+        pSPIHandle->RxLength--;
+        (uint16_t *)pSPIHandle->pRxBuffer++;
+    }
+    else
+    {
+        *(pSPIHandle->pRxBuffer) = pSPIHandle->pSPIx->DR;
+        pSPIHandle->RxLength--;
+        pSPIHandle->RxLength--;
+        pSPIHandle->pRxBuffer++;
+    }
+
+    if (!pSPIHandle->RxLength)
+    { // if reception is complete
+        pSPIHandle->pSPIx->CR2 &= ~(1 << SPI_CR2_RXNEIE);
+        pSPIHandle->RxLength = 0;
+        free(pSPIHandle->pRxBuffer);
+        pSPIHandle->pRxBuffer = NULL;
+        pSPIHandle->RxState = SPI_READY;
+
+        SPI_ApplicationEventCallback(pSPIHandle, SPI_EVENT_RX_COMPLETE);
+    }
+}
+
+/*
+logic:
+step1; clear overrun error flag when spi is not transmitting (by reading dr and sr)
+step2: inform application */
+
+static void spi_ovr_handler(SPI_Handle_t *pSPIHandle)
+{
+    uint32_t temp;
+    if (pSPIHandle->TxState != SPI_BUSY_IN_TX)
+    { // you dont want to read the dr and clear it during tx
+        temp = pSPIHandle->pSPIx->DR;
+        temp = pSPIHandle->pSPIx->SR;
+    }
+
+    SPI_ApplicationEventCallback(pSPIHandle, SPI_EVENT_OVR_ERR);
+}
+
+__weak void SPI_ApplicationEventCallback(SPI_Handle_t *pSPIHandle, uint8_t AppEv)
+{
+    // weak implementation, can be overrun by the application
+}
+
+/* functions for the application to call explicitly */
+
+void SPI_CloseTransmission(SPI_Handle_t *pSPIHandle)
+{
+    pSPIHandle->pSPIx->CR2 &= ~(1 << SPI_CR2_TXEIE);
+    pSPIHandle->TxLength = 0;
+    free(pSPIHandle->pTxBuffer);
+    pSPIHandle->pTxBuffer = NULL;
+    pSPIHandle->TxState = SPI_READY;
+}
+
+void SPI_CloseReception(SPI_Handle_t *pSPIHandle)
+{
+    pSPIHandle->pSPIx->CR2 &= ~(1 << SPI_CR2_RXNEIE);
+    pSPIHandle->RxLength = 0;
+    free(pSPIHandle->pRxBuffer);
+    pSPIHandle->pRxBuffer = NULL;
+    pSPIHandle->RxState = SPI_READY;
+}
+
+void SPI_ClearOvrFlag(SPI_RegDef_t *pSPIx){
+    uint32_t temp;
+    temp = pSPIx->DR;
+    temp = pSPIx->SR;
 }
